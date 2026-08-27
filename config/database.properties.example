@@ -1,0 +1,9 @@
+DB_URL=jdbc:mysql://localhost:3306/attempt?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+DB_USER=root
+DB_PASSWORD=change-me
+
+# 区块链配置请使用环境变量，不要把私钥写入此文件或提交记录：
+# BLOCKCHAIN_RPC_URL=https://your-rpc.example
+# BLOCKCHAIN_PRIVATE_KEY=replace-with-a-new-private-key
+# BLOCKCHAIN_CHAIN_ID=11155111
+# BLOCKCHAIN_EXPLORER_BASE_URL=https://sepolia.etherscan.io

@@ -1,0 +1,147 @@
+syntax = "proto3";
+/*
+cd C:\Users\qiaoak\Desktop\new_privacy_controller\src\main\proto
+./protoc-3.19.6-windows-x86_64 --proto_path=./ --java_out=../java/ ./controllerProtocol.proto
+ */
+
+option java_package = "controllerProtocol";
+option java_outer_classname = "ControllerProtocol";
+
+enum MessageRequestType {
+  Create_Stream = 0;
+  Create_PrivacyPolicy = 1;
+  Request_Token = 2;
+  Create_FederationPolicy = 3;
+  Request_FederationToken = 4;
+  Key_Agreement = 5;
+  Delete_Stream = 6;
+  Delete_PrivacyPolicy = 7;
+  Delete_FederationPolicy = 8;
+
+}
+
+message RequestMessage {
+  MessageRequestType type = 1;
+  oneof request {
+    CreateStream createStream = 2;
+    CreatePrivacyPolicy createPrivacyPolicy = 3;
+    RequestToken requestToken = 4;
+    CreateFederationPolicy createFederationPolicy = 5;
+    RequestFederationToken requestFederationToken = 6;
+    KeyAgreementRequest keyAgreement = 7;
+    DeleteStream deleteStream = 8;
+    DeletePrivacyPolicy deletePrivacyPolicy = 9;
+    DeleteFederationPolicy deleteFederationPolicy = 10;
+  }
+}
+
+message KeyAgreementRequest{
+  string userName = 1;
+  bytes pubKey = 2;
+}
+
+message CreateStream {
+  string userName = 1;
+  int64 streamId = 2;
+  bytes pubKey = 3;
+}
+
+message DeleteStream {
+  string userName = 1;
+  int64 streamId = 2;
+}
+
+message CreatePrivacyPolicy {
+  string consumerName = 1;
+  string ownerName = 2;
+  int64 policyId = 3;
+  int64 streamId = 4;
+  int64 startTime = 5;
+  int64 endTime = 6;
+  int64 minGranularity = 7;
+}
+
+message DeletePrivacyPolicy {
+  string ownerName = 1;
+  int64 policyId = 2;
+}
+
+message RequestToken {
+  string consumerName = 1;
+  string ownerName = 2;
+  int64 policyId = 3;
+  int64 streamId = 4;
+  int64 startTime = 5;
+  int64 endTime = 6;
+  int64 granularity = 7;
+}
+
+message CreateFederationPolicy {
+  string consumerName = 1;
+  string ownerName = 2;
+  int64 policyId = 3;
+  int64 streamId = 4;
+  int64 startTime = 5;
+  int64 endTime = 6;
+}
+
+message DeleteFederationPolicy {
+  string ownerName = 1;
+  int64 policyId = 2;
+}
+
+message RequestFederationToken {
+  bytes request_content = 1;
+}
+
+
+enum MessageResponseType {
+  Success_Response = 0;
+  Error_Response = 1;
+  Token_Response = 2;
+  FederationToken_Response = 3;
+  PubKey_Response = 4;
+}
+
+message ResponseMessage {
+  MessageResponseType type = 1;
+  oneof response {
+    SuccessResponse successResponse = 2;
+    ErrorResponse errorResponse = 3;
+    TokenResponse tokenResponse = 4;
+    FederationTokenResponse federationTokenResponse = 5;
+    PubKeyResponse pubKeyResponse = 6;
+  }
+}
+
+message SuccessResponse {
+  int32 id = 1;
+  string message = 2;
+}
+
+message ErrorResponse {
+  int32 id = 1;
+  string message = 2;
+}
+
+message PubKeyResponse {
+  string usrName = 1;
+  bytes pubKey = 2;
+}
+
+message TokenResponse {
+  int64 tokenId = 1;
+  string usrName = 2;
+  int64 streamId = 3;
+  int64 streamStartTime = 4;
+  int64 chunkSize = 5;
+  int64 granularity = 6;
+  bytes nodes_content = 7;
+  int32 depth = 8;
+  bytes macKey = 9;
+}
+message FederationTokenResponse {
+  bytes federationToken_content = 1;
+}
+
+

@@ -1,0 +1,57 @@
+# ===== 系统与编辑器 =====
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.iml
+.claude/
+.plan
+
+# ===== 运行日志与进程文件 =====
+logs/
+*.log
+*.pid
+
+# ===== 前端构建产物 =====
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== Maven 构建产物 =====
+target/
+
+# ===== 敏感配置（不入库，本地自行生成） =====
+.env
+config/database.properties
+config/blockchain-local.env
+config/anvil-local.secret
+config/*.secret
+secrets/
+
+# ===== 密钥库与密钥文件 =====
+*.jks
+*.p12
+*.key
+*.pem
+*.cert
+*.seed
+
+# ===== 运行时数据 =====
+data/uploads/
+data/local-chain/
+
+# ===== 二进制 / 平台文件 =====
+*.exe
+*.dll
+*.so
+*.dylib
+
+# ===== 其他 =====
+*.orig
+*.hprof

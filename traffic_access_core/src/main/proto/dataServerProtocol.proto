@@ -1,0 +1,228 @@
+syntax = "proto3";
+/*
+cd C:\Users\qiaoak\Desktop\akQiao\traffic_access_core\src\main\proto
+.\protoc-3.19.6-windows-x86_64 --proto_path=./ --java_out=../java/ ./dataServerProtocol.proto
+ */
+
+option java_package = "dataServerInterface.dataServerProtocol";
+option java_outer_classname = "DataServerProtocol";
+
+enum MessageRequestType {
+  Create_Stream = 0;
+  Delete_Stream = 1;
+  Add_Chunk = 2;
+  Get_Chunks = 3;
+  Get_Statistics = 4;
+  Get_StatisticAll = 5;
+  Add_Chunk_New = 6;
+  Get_Statistics_New = 7;
+  Get_Statistics_All_New = 8;
+  Add_Chunk_NewDigest = 9;
+}
+
+message RequestMessage {
+  MessageRequestType type = 1;
+  oneof request {
+    CreateStream createStream = 2;
+    DeleteStream deleteStream = 3;
+    AddChunk addChunk = 4;
+    GetChunks getChunks = 5;
+    GetStatistics getStatistics = 6;
+    GetStatisticAll getStatisticAll = 7;
+    AddChunkNew addChunkNew = 8;
+    GetStatisticsNew getStatisticsNew = 9;
+    GetStatisticAllNew getStatisticAllNew = 10;
+    AddChunkNewDigest addChunkNewDigest = 11;
+  }
+}
+
+message CreateStream {
+  string userName = 1;
+  int64 streamId = 2;
+}
+
+message DeleteStream {
+  string userName = 1;
+  int64 streamId = 2;
+}
+
+message AddChunk {
+  string userName = 1;
+  int64 correspondingStreamID = 2;
+  int64 chunkID = 3;
+  bytes encryptedChunkBytes = 4;
+  repeated MetaData encryptedDigest = 5;
+}
+
+message MetaData{
+  int64 encryptedMetaDataId = 1;
+  bytes encryptedMetaDataBytes = 2;
+}
+
+message GetChunks {
+  string userName = 1;
+  int64 streamID = 2;
+  int64 chunkIdFrom = 3;
+  int64 chunkIdTo = 4;
+}
+
+message GetStatistics {
+  string userName = 1;
+  int64 streamID = 2;
+  int64 chunkIdFrom = 3;
+  int64 chunkIdTo = 4;
+  int64 granularity = 5;
+  repeated int32 metaDataId = 6;
+}
+
+message GetStatisticAll {
+  string userName = 1;
+  int64 streamID = 2;
+  int64 chunkIdFrom = 3;
+  int64 chunkIdTo = 4;
+  repeated int32 metaDataId = 6;
+}
+
+message AddChunkNew {
+  string userName = 1;
+  int64 streamID = 2;
+  int64 chunkID = 3;
+  bytes encryptedChunkBytes = 4;
+  int64 sum = 5;
+  int64 count = 6;
+  int64 square = 7;
+  bool hasMac = 8;
+  bytes sumMacBytes = 9;
+  bytes countMacBytes = 10;
+  bytes squareMacBytes = 11;
+}
+
+message AddChunkNewDigest {
+  string userName = 1;
+  int64 streamID = 2;
+  int64 chunkID = 3;
+  bytes encryptedChunkBytes = 4;
+  int64 sum = 5;
+  int64 count = 6;
+  int64 square = 7;
+  int64 count1 = 8;
+  int64 count2 = 9;
+  int64 count3 = 10;
+  int64 count4 = 11;
+  int64 count5 = 12;
+  int64 count6 = 13;
+  bool hasMac = 14;
+  bytes sumMacBytes = 15;
+  bytes countMacBytes = 16;
+  bytes squareMacBytes = 17;
+  bytes count1MacBytes = 18;
+  bytes count2MacBytes = 19;
+  bytes count3MacBytes = 20;
+  bytes count4MacBytes = 21;
+  bytes count5MacBytes = 22;
+  bytes count6MacBytes = 23;
+}
+
+message GetStatisticsNew {
+  string userName = 1;
+  int64 streamID = 2;
+  int64 chunkIdFrom = 3;
+  int64 chunkIdTo = 4;
+  int64 granularity = 5;
+}
+
+message GetStatisticAllNew {
+  string userName = 1;
+  int64 streamID = 2;
+  int64 chunkIdFrom = 3;
+  int64 chunkIdTo = 4;
+}
+
+enum MessageResponseType {
+  Success_Response = 0;
+  Error_Response = 1;
+  AddChunk_Response = 2;
+  Data_Response = 3;
+  Statistics_Response = 4;
+  MultiData_Response = 5;
+  Digest_Response = 6;
+  Digest_Response_New = 7;
+}
+
+message ResponseMessage {
+  MessageResponseType type = 1;
+  oneof response {
+    SuccessResponse successResponse = 2;
+    ErrorResponse errorResponse = 3;
+    AddChunkResponse addChunkResponse = 4;
+    DataResponse dataResponse = 5;
+    StatisticsResponse statisticsResponse = 6;
+    MultiDataTransfer multiDataTransfer = 7;
+    DigestResponse digestResponse = 8;
+    DigestResponseNew digestResponseNew = 9;
+  }
+}
+
+message SuccessResponse {
+  int32 id = 1;
+  string message = 2;
+}
+
+message ErrorResponse {
+  int32 id = 1;
+  string message = 2;
+}
+
+message AddChunkResponse {
+  int64 chunkId = 1;
+}
+
+message DataResponse {
+  int64 key = 1;
+  bytes data = 2;
+}
+
+message StatisticsResponse {
+  repeated MetaData data = 1;
+}
+
+message MultiDataTransfer {
+  MessageResponseType messageType = 1;
+  int32 numTransfers = 2;
+}
+
+message DigestResponse{
+  int64 chunkIdFrom = 1;
+  int64 chunkIdTo = 2;
+  int64 sum = 3;
+  int64 count = 4;
+  int64 square = 5;
+  bool hasMac = 6;
+  bytes sumMacBytes = 7;
+  bytes countMacBytes = 8;
+  bytes squareMacBytes = 9;
+}
+
+message DigestResponseNew{
+  int64 chunkIdFrom = 1;
+  int64 chunkIdTo = 2;
+  int64 sum = 3;
+  int64 count = 4;
+  int64 square = 5;
+  int64 count1 = 6;
+  int64 count2 = 7;
+  int64 count3 = 8;
+  int64 count4 = 9;
+  int64 count5 = 10;
+  int64 count6 = 11;
+  bool hasMac = 12;
+  bytes sumMacBytes = 13;
+  bytes countMacBytes = 14;
+  bytes squareMacBytes = 15;
+  bytes count1MacBytes = 16;
+  bytes count2MacBytes = 17;
+  bytes count3MacBytes = 18;
+  bytes count4MacBytes = 19;
+  bytes count5MacBytes = 20;
+  bytes count6MacBytes = 21;
+}

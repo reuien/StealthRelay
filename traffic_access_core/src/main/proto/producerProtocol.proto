@@ -1,0 +1,119 @@
+syntax = "proto3";
+/*
+cd C:\Users\qiaoak\Desktop\new_client\src\main\proto
+./protoc-3.19.6-windows-x86_64 --proto_path=./ --java_out=../java/ ./producerProtocol.proto
+ */
+
+option java_package = "producerInterface.producerProtocol";
+option java_outer_classname = "ProducerProtocol";
+
+enum MessageRequestType {
+  Register_Producer = 0;
+  Link_Producer = 1;
+  Key_Agreement = 2;
+  Create_Stream = 3;
+  Delete_Stream = 4;
+  Upload_Data = 5;
+  Upload_Data_Live = 6;
+}
+
+message RequestMessage {
+  MessageRequestType type = 1;
+  oneof request {
+    RegisterProducer registerProducer = 2;
+    LinkProducer linkProducer = 3;
+    KeyAgreementRequest keyAgreement = 4;
+    CreateStream createStream = 5;
+    DeleteStream deleteStream = 6;
+    UploadData uploadData= 7;
+    UploadDataLive uploadDataLive = 8;
+  }
+}
+
+message RegisterProducer{
+  string userName = 1;
+  int64 producerId = 2;
+  string producerName = 3;
+  string producerAddress = 4;
+  int32  producerPort = 5;
+}
+
+message LinkProducer{
+  string userName = 1;
+  int64 producerId = 2;
+  string producerName = 3;
+}
+
+message KeyAgreementRequest{
+  string userName = 1;
+  int64 producerId = 2;
+  bytes pubKey = 3;
+}
+
+message CreateStream {
+  string userName = 1;
+  int64 producerId = 2;
+  int64 streamId = 3;
+  bytes pubKey = 4;
+}
+
+message DeleteStream {
+  string userName = 1;
+  int64 producerId = 2;
+  int64 streamId = 3;
+}
+
+message UploadData{
+  string userName = 1;
+  int64 producerId = 2;
+  int64 streamId = 3;
+  string description = 4;
+  int64 startTime = 5;
+  int64 endTime = 6;
+  int64 chunkSize = 7;
+  int64 resolutionLevels = 8;
+}
+
+message UploadDataLive{
+  string userName = 1;
+  int64 producerId = 2;
+  int64 streamId = 3;
+  string description = 4;
+  int64 startTime = 5;
+  int64 endTime = 6;
+  int64 chunkSize = 7;
+  int64 resolutionLevels = 8;
+}
+
+
+enum MessageResponseType {
+  Success_Response = 0;
+  Error_Response = 1;
+  PubKey_Response = 2;
+}
+
+message ResponseMessage {
+  MessageResponseType type = 1;
+  oneof response {
+    SuccessResponse successResponse = 2;
+    ErrorResponse errorResponse = 3;
+    PubKeyResponse pubKeyResponse = 4;
+  }
+}
+
+message SuccessResponse {
+  int32 id = 1;
+  string message = 2;
+}
+
+message ErrorResponse {
+  int32 id = 1;
+  string message = 2;
+}
+
+message PubKeyResponse {
+  string usrName = 1;
+  bytes pubKey = 2;
+}
+
+
