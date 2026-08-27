@@ -79,6 +79,22 @@ cp config/database.properties.example config/database.properties
 
 > ⚠️ `config/database.properties` 已被 `.gitignore` 忽略，真实密码不会进入版本库；部署时也可用环境变量覆盖。
 
+### ⚙️ 运行前必改的本地配置（恢复真实凭据）
+
+仓库**不包含任何真实密码或私钥**。为了安全，仓库中的示例与本地占位文件均为虚构值，正式运行前必须恢复：
+
+| 文件 | 需要恢复的内容 | 恢复方法 |
+| --- | --- | --- |
+| `config/database.properties` | `DB_PASSWORD`（当前为占位值 `CHANGE-ME-FAKE-PASSWORD-2026`） | 改为你的真实 MySQL 密码（该文件不入库） |
+| `config/blockchain-local.env` | `BLOCKCHAIN_PRIVATE_KEY`（当前为占位值 `f00d...`） | 删除本文件与 `anvil-local.secret` 后运行 `bash start-local-chain.sh`，自动生成全新的随机开发账户 |
+| `config/anvil-local.secret` | 本地链助记词（当前为公开的测试助记词） | 同上，随 `start-local-chain.sh` 自动重新生成 |
+
+同理，以下均为**本地运行时生成、不入库**的内容：
+
+- `data/local-chain/`：Anvil 本地链状态；
+- `data/uploads/`：通过页面上传的 CSV 与状态文件（演示数据见 `test/`）；
+- 各模块 `src/main/java/key/*.jks`：用户/生产者密钥库，首次注册时自动生成。
+
 ### 3. 构建并启动后端
 
 ```bash
@@ -159,13 +175,3 @@ timestamp,vehicle_flow
 - 链上仅存 SHA-256 摘要与业务元数据，不存原始数据、完整密文或任何密钥。
 - 本地 Anvil 链（`127.0.0.1:8545`，chain ID `31337`）仅用于开发与演示，接入公网（如 Sepolia）时必须更换全新账户。
 
-## 📌 已知限制
-
-- 登录 Token 保存在网关内存中，服务重启后需重新登录（原型阶段，非生产级认证体系）。
-- 部分底层模块来自旧架构，Java 版本与日志依赖尚未完全统一。
-- 区块链为异步最终一致性存证，页面如实显示「待上链 / 已确认」状态。
-
-## 📄 相关文档
-
-- 详细技术要点与开发进度：见同级目录 `项目要点总结.md`
-- 功能设计文档：`docs/plans/`
